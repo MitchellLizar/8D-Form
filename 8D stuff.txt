@@ -1,0 +1,105 @@
+<div class="leftLabel">
+	<label for="mastercontrol.role.D8_TeamLeaders" class="dynamicLabel">Team Leader:</label>
+</div>
+<div class="leftField">
+	<div class="subField">
+		<select class="dropdownfield" id="mastercontrol.role.D8_TeamLeaders" name="mastercontrol.role.D8_TeamLeaders"
+		title="Team Leader" alt="T2 Team Leader" onchange="RefreshFieldProperties(this,'T2');"></select>
+	</div>
+	<div class="subLabel">
+		<label for="mastercontrol.role.SP_AUD_ors">Team Members:</label>
+	</div>
+	<div class="subField lastField" style="margin-top:-2px">
+	<select alt="T2 Team Members" title="Team Members" class="listfield" id="mastercontrol.role.D8_Team" name="mastercontrol.role.D8_Team" onmouseout="this.focus();RefreshFieldProperties(this,'T2',event);" onblur="RefreshFieldProperties(this,'T2',event);" multiple="multiple"></select>
+		<select name="hlpTeamMembers" id="hlpTeamMembers" multiple="multiple" class="listfield" title=" Team Members" alt="Help Team Members" onmouseover="RefreshFieldProperties(this,'T2');" onfocus="RefreshFieldProperties(this,'T2');" style="display:none"></select>
+	</div>
+</div>
+<div class="clearBoth"></div>
+
+if(obj.name == "mastercontrol.role.D8_Team")
+{
+	UserAssignment(obj.name,'mastercontrol.route.stepusers.step2',true);
+	UserAssignment(obj.name,'mastercontrol.route.stepusers.step3',true);
+	SetT2FieldProperties(document.getElementById("mastercontrol.role.D8_Team"));
+	if(arguments[1])
+		ToggleVisibility(obj,arguments[1]);
+	else
+		ToggleVisibility(obj);
+}
+		UserAssignment('mastercontrol.role.D8_Team','mastercontrol.route.stepusers.step2',false);
+		UserAssignment('mastercontrol.role.D8_Team','mastercontrol.route.stepusers.step3',false);
+
+		
+		
+		
+function ToggleVisibility(obj)
+{
+    var secondary;
+    var targ;
+    
+    if(obj.name == "mastercontrol.set.Standard_Reference") // if drop down is Standard Reference
+    {
+        secondary = document.getElementById("hlpStandardReference");
+        secondary.length = 0;
+    }
+    else // if drop down object is of 'mastercontrol.role.D8_Team
+    {
+        secondary = document.getElementById("hlpTeamMembers");
+        secondary.length = 0;
+    }
+    if(arguments[1])
+    {
+        /* Browser check to cater event for SELECT element */
+        var e = arguments[1];
+        if (!e) var e = window.event;
+        if (e.target) targ = e.target;
+        else if (e.srcElement) targ = e.srcElement;
+        if (targ.nodeType == 3) // defeat Safari bug
+            targ = targ.parentNode;
+    }
+    else
+    {
+        targ = "onload";
+    }
+    if(targ.id != "")
+    {
+        if(obj.selectedIndex != -1)
+        {
+            obj.style.display = "none";
+            for(var i = 0; i< obj.options.length; i++)
+            {
+                if(obj.options[i].selected)
+                {
+                    var objOption = document.createElement("option");
+                    objOption.text = obj.options[i].text;
+                    objOption.value = obj.options[i].value;
+
+                    if(document.all && !window.opera)
+                    {
+                        secondary.add(objOption);
+                    }
+                     else
+                    {
+                        secondary.add(objOption, null);
+                    }
+                }
+            }
+            secondary.style.display = "block";
+            secondary.size = secondary.length;
+        }
+    }
+    else
+    {
+        if(obj.name == "mastercontrol.set.Standard_Reference")
+            showAllOpt("hlpStandardReference");
+        if(obj.name == "mastercontrol.role.D8_Team")
+            showAllOpt("hlpTeamMembers");
+    }
+}
+
+
+
+
+
+
+
